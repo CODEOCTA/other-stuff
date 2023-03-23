@@ -1,0 +1,63 @@
+
+@{
+    ViewBag.Title = ViewBag.PageTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.PageTitle</h2>
+
+<div class="container">
+    <div class="row">
+        <input type="hidden" id="hiddenField" value="" />
+        <div class="col-md-12">
+            <div class="col-md-3">
+                <label class="input-group">FirstName</label>
+                <input type="text" maxlength="50" id="txtFirstName"  class="form-control" />
+            </div>
+            <div class="col-md-3">
+                   <label class="input-group">LastName</label> 
+                <input type="text" maxlength="50" id="txtLastName" class="form-control"/>
+            </div>
+            <div class="col-md-3">
+                <label>Gender</label> <br/>
+                <input type="radio" id="rbMale" name="Gender" value="Male" title="Male"/><label for="rbMale">&nbsp;Male</label> &nbsp;
+                <input type="radio" id="rbFemale" name="Gender" value="Female" /><label for="rbFemale">&nbsp;Female</label>
+            </div>
+            <div class="col-md-3">
+                <label class="input-group">Email</label>
+                <input type="text" maxlength="50" id="txtEmail" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-3">
+                <label class="input-group">ContactNo</label>
+                <input type="text" maxlength="50" id="txtContactNo" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label class="input-group">Salary</label>
+                <input type="text" maxlength="50" id="txtSalary" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label>Active</label><br/>
+                <input type="checkbox" id="CheckActive" /><label for="CheckActive"></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12" style="margin:15px">
+                <input type="button" id="btnSave" value="Save" />&nbsp;
+                <input type="button" id="btnReset" value="Reset" onclick="Reset()" />
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div style="width:100%" id="EmployeeContainer">                  
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/Customejsfile.js"></script>

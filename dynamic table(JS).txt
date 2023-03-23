@@ -1,0 +1,208 @@
+var allEmployees = [];
+
+debugger
+function PullAllEmployees()
+{
+    $.ajax({
+
+        type: "GET",
+        url: "http://localhost:50929/api/Employees/PullEmployee",
+        dataType: "json",
+        success: function (xdata) {
+            console.log(xdata);
+            if (xdata && xdata.IsAuthenticated == true) {
+                allEmployees = xdata.Result;
+                GetAllEmployees(allEmployees);
+            }
+            else if (xdata.MessageType == 0)
+            {
+                alert(xdata.Message);
+            }
+            else
+            {
+                window.location.href = "http://localhost:62542/Account/Login";
+            }
+        },
+        error: function (errorResponse) {
+            
+        }
+    });
+}
+
+function GetAllEmployees(listemployees)         //Display purpose
+{
+    $("#EmployeeContainer").html('');
+
+    var tblemployee = '<table cellpadding="1" cellspacing="1" style="border:solid thin black;margin:0px 0px;padding: 0px 0px;">'; //
+    tblemployee += '<thead>'
+                 + '   <tr>'
+                 + '<th style="border:solid thin black;width:10%"> FullName </th>'
+                 + '<th style="border:solid thin black;width:10%"> Gender </th>'
+                 + '<th style="border:solid thin black;width:10%"> Email </th>'
+                 + '<th style="border:solid thin black;width:10%"> ContactNo </th>'
+                 + '<th style="border:solid thin black;width:10%"> Salary </th>'
+                 + '<th style="border:solid thin black;width:10%"> Active </th>'
+                 + '<th style="border:solid thin black;width:10%"> Actions</th>'
+                 + '   </tr>'
+                 + '</thead>';      //
+    tblemployee += '<tbody>';       //
+    if (listemployees.length > 0) {
+        $(listemployees).each(function (i, val) {
+
+           // val.FullName = val.FirstName + ' ' + val.LastName;
+            tblemployee += '<tr>'
+              + '<td style="border:solid thin black; width:10%">' + val.FullName + '</td>'
+              + '<td style="border:solid thin black; width:10%">' + val.Gender + '</td>'
+              + '<td style="border:solid thin black; width:10%">' + val.Email + '</td>'
+              + '<td style="border:solid thin black; width:10%">' + val.ContactNo + '</td>'
+              + '<td style="border:solid thin black; width:10%">' + val.Salary + '</td>'
+              + '<td style="border:solid thin black; width:10%">' + '<input type="checkbox" id="checkActive2"  ' + val.EmployeeId +' '+ (val.Active ? 'checked':'') + ' disabled><label for="checkActive2"></label>' + '</td>'
+              + '<td style="border:solid thin black; width:10%">' 
+
+              +'<a href="javascript:void(0);" onclick="GetEmployeeID('+val.EmployeeId+');" class="input-group">Edit</a>'
+              + '<a href="javascript:void(0);" onclick="DeleteByID(' + val.EmployeeId + ');" class="input-group">Delete</a>'
+
+              + '</td>'
+              + '</tr>';        //
+
+        });
+    }
+    else                 // here is the problem may be...
+    {
+        tblemployee = '<tr><td colspan="7" style="align:center;vertical-align:middle;line-height:250px;">No employee record Found</td></tr> ';                         //
+    }
+
+    tblemployee += '</tbody>';  //
+    tblemployee += '</table>';  //
+
+    $("#EmployeeContainer").html(tblemployee);
+}
+
+function GetEmployeeID(idToEdit)  // this will edit the record
+{
+    $("#hiddenField").val(idToEdit);
+
+    $.ajax({                // object niche ave*****************
+
+        type:"POST",
+        url: "http://localhost:50929/api/Employees/EditEmployee?Id=" + idToEdit, // 
+        success: function (xdata)
+        {
+            if (xdata && xdata.IsAuthenticated == true)
+            {
+                var employeeobject = xdata.Result;
+                $("#txtFirstName").val(employeeobject.FirstName);
+                $("#txtLastName").val(employeeobject.LastName);                
+                $("#txtEmail").val(employeeobject.Email);
+                $("#txtSalary").val(employeeobject.Salary);
+                $("#txtContactNo").val(employeeobject.Contact);                
+                $("#CheckActive").prop('checked', employeeobject.Active);   //
+
+                if (employeeobject.Gender == 'Male')
+                {
+                    $("#rbMale").prop('checked', true); //
+                }
+                else
+                {
+                    $("#rbFemale").prop('checked', true);   //
+                }                
+            }
+            else if (xdata.MessageType == 0)
+            {
+                alert(xdata.Message);
+            }
+            else
+            {
+                window.location.href = "http://localhost:62542/Account/Login";
+            }
+        },
+        error: function (errorResponse) {
+
+        }
+    });
+}
+
+function Reset()
+{
+    $("#hiddenField").val('');
+    $("#txtFirstName").val('');
+    $("#txtLastName").val('');
+    $("#txtEmail").val('');
+    $("#txtSalary").val('');
+    $("#txtContactNo").val('');
+    $("#CheckActive").prop('checked',false);
+    $("#rbMale").prop('checked', false);
+    $("#rbFemale").prop('checked',false);
+}
+
+$(document).ready(function () {
+    PullAllEmployees();
+
+    $("#btnSave").click(function () {
+
+        var EmployeeObj =                   //???????????????
+            {
+                EmployeeId:$("#hiddenField").val(), //
+                FirstNaem: $("#txtFirstName").val(),
+                LastName: $("#txtLastName").val(),
+                Gender:$("#rbMale").prop('checked') == true ? 'Male' :'Female',      //
+                Email: $("#txtEmail").val(),
+                Contact: $("#txtContactNo").val(),
+                Salary: $("#txtSalary").val(),
+                Active: $("#CheckActive").prop('checked'),  //
+
+            };
+
+
+        $.ajax({                //object uper ave*******************
+
+            type: "POST",
+            url: "http://localhost:50929/api/Employees/Create_Update",
+            dataType: "json",
+            data: JSON.stringify(EmployeeObj),
+            contentType: "application/json;charset=UTF-8",
+            success: function (xdata) 
+            {
+                if (xdata && xdata.IsAuthenticated == true)
+                {
+                    alert("Data Saved Successfully");
+                    Reset();                //
+                    PullAllEmployees();     //  this will refresh data 
+                }
+                else if (xdata.MessageType == 0)
+                {
+                    alert(xdata.Message);
+                }
+                else
+                {
+                    window.location.href = "http://localhost:62542/Account/Login";
+                }
+
+
+            },
+            error: function (errorResponse)
+            {
+
+            }
+        });
+
+    });
+});
+
+function DeleteByID(empId) {
+    $.ajax({
+        
+        type: "POST",
+        url: "http://localhost:50929/api/Employees/DeleteEmployee?idToDelete=" + empId,
+        cache: false,
+        success: function (xdata) {  //
+
+            alert("Data Removed");
+
+            window.location.reload();
+        },
+        error: function (errorResponse) {
+
+        }
+    });
+}
