@@ -1,0 +1,340 @@
+@{
+    ViewBag.Title = "EmailIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ASK DEMO</title>
+
+    <script src="~/Scripts/jquery-3.6.3.min.js"></script>
+
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet">
+    <script src='https://cdn.rawgit.com/pguso/jquery-plugin-circliful/master/js/jquery.circliful.min.js'></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+<body>
+    <div style="padding: 50px; width: 600px;">
+        <input type="button" id="btnAdd" value="ADD NEW" style="float:right;" onclick="AddNew();" />
+        <br />
+        <br />
+       
+        <br />
+        <table id="tblAdd" style="display: none;">
+            <tr>
+                <td colspan="2" id="heading"><b>Add New Record</b></td>
+            </tr>
+            <tr>
+                <td>To</td>
+                <td>
+                    <input type="text" id="txtEmail" />
+                    <label id="requiredEmail">Email is Required</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Subject</td>
+                <td>
+                    <input type="text" id="txtSubject" />
+                    <label id="requiredSubject">Subject is Required</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Attachment</td>
+                <td>
+                    <input type="text" id="txtAttachment" />
+                    <label id="requiredAttachment">Attachment is Required</label>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Body</td>
+                <td>
+                    <input type="text" id="txtBody" />
+                    <label id="requiredBody">Body is Required</label>
+                </td>
+            </tr>
+
+
+
+            <tr>
+                <td></td>
+                <td>
+                    <input type="button" value="Save" id="btnPost" />       <input type="button" value="Edit" id="EditValue" />
+                </td>
+            </tr>
+        </table>
+
+        
+
+
+
+    </div>
+    <script type="text/javascript">
+
+        //   var count = [];
+        //   var i=0;
+        var deleteDataID;
+        $(document).ready(function () {
+
+
+            //$("#searchInput").autocomplete({
+            //    source: function (request, response) {
+            //        $.ajax({
+            //            url: 'http://localhost:22160/Home/GetSearchValue',
+            //            dataType: "json",
+            //            data: { search: $("#searchInput").val() },
+            //            success: function (data) {
+            //                response($.map(data, function (item) {
+            //                    console.log(item)
+            //                    return { label: item.Name, value: item.Name };
+            //                }));
+            //            },
+            //            error: function (xhr, status, error) {
+            //                alert("Error");
+            //            }
+            //        });
+            //    }
+            //});
+            ////    $("#hiddenemployeeID").hide();
+            //$("#requiredName").hide();
+            //$("#requiredCity").hide();
+            //$("#requiredGender").hide();
+            //$("#requiredHobby").hide();
+
+            //var validateN = false;
+            //var validateC = false;
+            //var validateG = false;
+            //var validateH = false;
+            $("#btnPost").click(function () {
+
+                //if ($('#txtName').val() == "") {
+                //    // alert("Name is required.");
+                //    $("#requiredName").show();
+                //    validateN = false;
+                //    //return false;
+                //}
+                //else {
+                //    $("#requiredName").hide();
+                //    validateN = true;
+                //}
+                //if ($("input[name='gender']:checked").length == 0) {
+                //    $("#requiredGender").show();
+                //    validateG = false;
+                //}
+                //else {
+                //    $("#requiredGender").hide();
+                //    validateG = true;
+                //}
+                //if ($("#ddlCity option:selected").val() == "Select City") {
+                //    $("#requiredCity").show();
+                //    validateC = false;
+                //}
+                //else {
+                //    $("#requiredCity").hide();
+                //    validateC = true;
+                //}
+                //if ($("input[type=checkbox]:checked").length == 0) {
+                //    $("#requiredHobby").show();
+                //    validateH = false;
+                //}
+                //else {
+                //    $("#requiredHobby").hide();
+                //    validateH = true;
+                //}
+                var employee = new Object();
+                employee.Email = $('#txtEmail').val();
+                employee.Subject = $('#txtSubject').val();
+                employee.Attachment = $('#txtAttachment').val();
+                employee.Body = $('#txtBody').val();
+
+                console.log(employee)
+                //return;
+                //&& (validateN && validateC && validateG && validateH
+                if ((employee != null)) {
+
+
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Home/bttn_Send_Click",
+                        data: JSON.stringify(employee),  //
+                        contentType: "application/json; charset=utf-8",     //
+                        dataType: "json",       //
+                        success: function (response) {
+
+                            console.log(response);
+
+                            if (response != null) {
+                                alert("Data Saved Successfully.");
+                                //  count[i]= $("#hiddenemployeeID").val();
+                                //  i++;
+                            }
+                            else {
+                                alert("Something went wrong");
+                            }
+
+                            window.location.reload();  //
+
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            });
+
+
+            $("#EditValue").click(function () {
+
+                if ($('#txtName').val() == "") {
+                    // alert("Name is required.");
+                    $("#requiredName").show();
+                    validateN = false;
+                    //return false;
+                }
+                else {
+                    $("#requiredName").hide();
+                    validateN = true;
+                }
+                if ($("input[name='gender']:checked").length == 0) {
+                    $("#requiredGender").show();
+                    validateG = false;
+                }
+                else {
+                    $("#requiredGender").hide();
+                    validateG = true;
+                }
+                if ($("#ddlCity option:selected").val() == "Select City") {
+                    $("#requiredCity").show();
+                    validateC = false;
+                }
+                else {
+                    $("#requiredCity").hide();
+                    validateC = true;
+                }
+                if ($("input[type=checkbox]:checked").length == 0) {
+                    $("#requiredHobby").show();
+                    validateH = false;
+                }
+                else {
+                    $("#requiredHobby").hide();
+                    validateH = true;
+                }
+                var employee = new Object();
+                employee.Name = $('#txtName').val();
+                employee.Gender = $("input[name='gender']:checked").val();
+                employee.City = $("#ddlCity option:selected").val();
+                employee.Hobbies = $("input[name='hobbies']:checked").map(function () { return $(this).val(); }).get().join();
+
+
+                if ((employee != null) && (validateN && validateC && validateG && validateH)) {
+
+
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Home/AjaxCall_Change",
+                        data: JSON.stringify(employee),  //
+                        contentType: "application/json; charset=utf-8",     //
+                        dataType: "json",       //
+                        success: function (response) {
+
+                            console.log(response);
+
+                            if (response != null) {
+                                alert("Data Saved Successfully.");
+                                //  count[i]= $("#hiddenemployeeID").val();
+                                //  i++;
+                            }
+                            else {
+                                alert("Something went wrong");
+                            }
+
+                            window.location.reload();  //
+
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            });
+        });
+
+        function AddNew() {
+            $("#tblAdd").show();
+
+            $("#EditValue").hide();
+            $("#btnDelete").hide();
+            $("#btnAdd").hide();
+            $("#tblList").hide();
+        }
+        function Edit(editDataID) {
+            $("#tblAdd").show();
+            $("#ename").show();  //
+            $("#egendr").show();
+            $("#heading").html("<b>Edit Selected Record</b>");
+
+
+            $.ajax({
+                type: "GET",
+                url: "/Home/AjaxCall_Edit?editDataID=" + editDataID, //query string
+                success: function (result) {
+
+                    alert("WORKIN");
+                    result = JSON.parse(result);
+                }
+            });
+
+            $('#txtName').val("value");
+
+            $("#btnPost").hide();
+            $("#btnDelete").hide();
+            $("#btnAdd").hide();
+            $("#tblList").hide();
+        }
+
+        function Remove(EmployeeID) {
+
+            $.ajax({
+                type: "GET",
+                url: "/Home/AjaxPostCall_Del?deleteDataID=" + EmployeeID, //query string
+                success: function (result) {
+                    $("#row__" + deleteDataID).remove();  //
+                    alert("Removed Data");
+                    window.location.reload();
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
