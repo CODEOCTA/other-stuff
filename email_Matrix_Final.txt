@@ -1,0 +1,20 @@
+public void bttn_Send_Click(Employee employeeData)
+        {
+            
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("noreplyehstesting78@gmail.com.com");
+                mail.To.Add("receiver_Mail@gmail.com");
+                mail.Subject = "Hello World";
+                mail.Body = "<h1>Hello</h1>";
+                mail.IsBodyHtml = true;
+
+
+                using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtp.Credentials = new NetworkCredential("noreplyehstesting78@gmail.com", "cntpraqgsaqjlxpi");
+                    smtp.EnableSsl = true;                 
+                    smtp.Send(mail);
+                }
+            }
+        }
