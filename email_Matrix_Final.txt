@@ -1,7 +1,3 @@
-using System.Net;
-using System.Net.Mail;
-using System.Web.UI.WebControls;
-
 public void bttn_Send_Click(Employee employeeData)
         {
             
