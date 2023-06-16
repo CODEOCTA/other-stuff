@@ -1,0 +1,29 @@
+Incident flow
+
+Submit/Save as draft---> Any user[admin]
+verification---> Safety HSE Team [Mishant,Pranay]
+review 1-----> Department Head(HOD)[Mishant,Pranay]~~~~>Send back for correction--->nxt action who 
+submitted incident that is Any user[admin]
+review 2-----> HEAD-HSE [Mishant,Pranay]
+For your action----> invstigation team members 
+invstigation complete(send for  review1)----->site Head [bhargavip]~~~~>Send back for correction--->nxt action who is
+invstigation team members 
+invstigation approved and send for review2---->plant Head [bhargavip]~~~~>Send back for correction--->nxt action who is
+invstigation team members 
+
+
+assigned capa person
+
+capa flow
+completed--->assigned person
+review1---> Safety HSE Team [Mishant,Pranay]~~~~>Send back for correction--->nxt action who is
+assigned person
+review2---> Department Head(HOD) [Mishant,Pranay]~~~~>Send back for correction--->nxt action who is
+assigned person
+review3---> plant Head  [Pranay]~~~~>Send back for correction--->nxt action who is
+assigned person
+
+
+tables used while Incident records save in db 
+1)IncidentFIRDetail for incident/Accident/Nearmiss
+2)IncidentDetail  for incident/Accident/Nearmiss Investigation
